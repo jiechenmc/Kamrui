@@ -1,0 +1,3 @@
+[submodule "jiechen.dev"]
+	path = jiechen.dev
+	url = git@github.com:jiechenmc/jiechen.dev.git
