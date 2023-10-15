@@ -1,27 +1,22 @@
 version: '3'
 
 services:
-  reverse-proxy:
-    # The official v2 Traefik docker image
+  traefik:
     image: traefik:v2.10
-    # Enables the web UI and tells Traefik to listen to docker
-    command: 
-      - --api.insecure=true 
-      - --providers.docker
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
     ports:
       - 80:80
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
+    restart: always
 
-  web:
+  home:
     build: 
       context: jiechen.dev
-    ports:
-      - 3000:4173
     labels:
       - traefik.enable=true
-      - traefik.http.routers.app.rule=Host(`chabanon.online`)
-      - traefik.http.routers.app.entrypoints=web
+      - traefik.http.routers.home.rule=PathPrefix(`/`)
+    restart: always
+    depends_on:
+      - traefik
