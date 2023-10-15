@@ -9,9 +9,11 @@
 [log]
   level = "INFO"
   format = "common"
+  filePath = "os.stdout"
 
 [accessLog]
   format = "common"
+  filePath = "os.stdout"
 
 [api]
   dashboard = true
