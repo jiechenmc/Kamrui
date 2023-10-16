@@ -16,7 +16,8 @@ services:
       context: jiechen.dev
     labels:
       - traefik.enable=true
-      - traefik.http.routers.home.rule=PathPrefix(`/`)
+      - traefik.http.routers.home.rule=Host(`jiechen.dev`)
+      - traefik.docker.network=chendev_default
     restart: always
     depends_on:
       - traefik

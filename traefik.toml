@@ -9,12 +9,21 @@
 [log]
   level = "INFO"
   format = "common"
-  filePath = "os.stdout"
+  #filePath = "/var/log/traefik.log"
 
 [accessLog]
-  format = "common"
-  filePath = "os.stdout"
+  filePath = "/var/log/access.log"
+  format = "json"
 
+  [accessLog.fields]
+    defaultMode = "keep"
+
+    [accessLog.fields.headers]
+      defaultMode = "drop"
+
+      [accessLog.fields.headers.names]
+        "Cf-connecting-ip" = "keep"
+  
 [api]
   dashboard = true
   insecure = true
