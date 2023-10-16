@@ -36,3 +36,4 @@
 [metrics]
   [metrics.prometheus]
     entryPoint = "metrics"
+    addServicesLabels = true
