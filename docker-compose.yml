@@ -66,11 +66,24 @@ services:
     logging:
       options:
         max-size: "10m"
-        max-file: "3"  
-  
+        max-file: "3"
+        
+  uptime:
+    image: louislam/uptime-kuma
+    networks:
+      - app_net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.uptime.rule=Host(`status.jiechen.dev`)
+      - traefik.docker.network=chendev_default
+      - traefik.http.routers.uptime.entrypoints=web
+    volumes:
+      - UPTIME:/app/data
+
 volumes:
     PROMETHEUS:
     GRAFANA:
+    UPTIME:
 
 networks:
   app_net:
