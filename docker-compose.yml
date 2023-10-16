@@ -23,7 +23,6 @@ services:
     networks:
       - app_net
     labels:
-      - traefik.enable=true
       - traefik.http.routers.home.rule=Host(`jiechen.dev`)
       - traefik.docker.network=chendev_default
       - traefik.http.routers.home.entrypoints=web
@@ -42,10 +41,6 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention.size=256MB'
-    labels:
-      - traefik.enable=true
-      - "traefik.http.routers.prometheus.service=prometheus"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
     restart: unless-stopped
     logging:
       options:
@@ -66,10 +61,6 @@ services:
     environment:
       GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
       GF_INSTALL_PLUGINS: grafana-piechart-panel
-    labels:
-      - traefik.enable=true
-      - "traefik.http.routers.grafana.service=grafana"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     restart: unless-stopped
     logging:
       options:
