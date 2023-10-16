@@ -3,6 +3,8 @@ version: '3'
 services:
   traefik:
     image: traefik:v2.10
+    networks:
+      - app_net
     ports:
       - 80:80
       - 8080:8080
@@ -10,14 +12,75 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
     restart: always
+    depends_on:
+      - home
+      - prometheus
+      - grafana
 
   home:
     build: 
       context: jiechen.dev
+    networks:
+      - app_net
     labels:
       - traefik.enable=true
       - traefik.http.routers.home.rule=Host(`jiechen.dev`)
       - traefik.docker.network=chendev_default
+      - traefik.http.routers.home.entrypoints=web
     restart: always
+
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - app_net
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - PROMETHEUS:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.size=256MB'
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.prometheus.service=prometheus"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  grafana:
+    image: grafana/grafana-enterprise
+    networks:
+      - app_net
     depends_on:
-      - traefik
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - GRAFANA:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    environment:
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.grafana.service=grafana"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"  
+  
+volumes:
+    PROMETHEUS:
+    GRAFANA:
+
+networks:
+  app_net:
+      name: chendev_default
+      external: true
