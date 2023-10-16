@@ -23,6 +23,7 @@ services:
     networks:
       - app_net
     labels:
+      - traefik.enable=true
       - traefik.http.routers.home.rule=Host(`jiechen.dev`)
       - traefik.docker.network=chendev_default
       - traefik.http.routers.home.entrypoints=web
