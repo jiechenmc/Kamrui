@@ -16,6 +16,10 @@ services:
       - home
       - prometheus
       - grafana
+      - mongo
+      - deck
+      - repository
+      - client
 
   home:
     build: 
@@ -77,8 +81,61 @@ services:
       - traefik.http.routers.uptime.rule=Host(`status.jiechen.dev`)
       - traefik.docker.network=chendev_default
       - traefik.http.routers.uptime.entrypoints=web
+    restart: always
     volumes:
       - UPTIME:/app/data
+
+  mongo:
+    image: mongo
+    networks:
+      - app_net
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  repository:
+    build:
+      context: ./loqi/repository/
+      dockerfile: Dockerfile
+    networks:
+        - app_net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.repository.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/api/repository`)
+      - traefik.http.routers.repository.entrypoints=web
+    restart: always
+    depends_on:
+      - mongo
+
+  deck:
+    build:
+      context: ./loqi/deck/
+      dockerfile: Dockerfile
+    networks:
+        - app_net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.deck.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/api/deck`)
+      - traefik.http.routers.deck.entrypoints=web
+    restart: always
+    depends_on:
+      - mongo
+
+  client:
+    build:
+      context: ./loqi/neo_client/
+      dockerfile: Dockerfile
+    networks:
+        - app_net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.client.rule=Host(`loqi.jiechen.dev`)
+      - traefik.http.routers.client.entrypoints=web
+    restart: always
+    depends_on:
+      - repository
+      - deck
 
 volumes:
     PROMETHEUS:
