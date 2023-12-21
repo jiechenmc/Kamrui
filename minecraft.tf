@@ -46,7 +46,7 @@ resource "aws_key_pair" "home" {
 
 resource "aws_instance" "minecraft" {
   ami                         = "ami-0c7217cdde317cfec"
-  instance_type               = "t2.micro"
+  instance_type               = "t2.medium"
   vpc_security_group_ids      = [aws_security_group.minecraft.id]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.home.key_name
