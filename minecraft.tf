@@ -50,6 +50,7 @@ resource "aws_instance" "minecraft" {
   vpc_security_group_ids      = [aws_security_group.minecraft.id]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.home.key_name
+  user_data                   = file("docker.sh")
   tags = {
     Name = "Minecraft"
   }
