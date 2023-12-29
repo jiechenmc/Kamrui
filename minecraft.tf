@@ -27,6 +27,15 @@ resource "aws_security_group" "minecraft" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  ingress {
+    description = "Allow prometheus monitoring"
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     description = "Send everywhere."
     from_port   = 0
@@ -41,7 +50,7 @@ resource "aws_security_group" "minecraft" {
 
 resource "aws_key_pair" "home" {
   key_name   = "Home"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCryHrAiznFHtk70ybiM1AvuXyTR5X7u3eqSzxznTuQlAZJqB6h1N3MH5csn8llup8nA44FQ2A5AfIG2D8/NbtWUikzZJiU7EUw2L1njOEeeqrY8CvOf94IrDty9nEXCjTgtsutdf/992U5UQj0r2c3DcmvDD54xwPfAG9KBRMdWjvH1bwMBSLsSt9gnviAc9QoPxPnR7bnqbK2XGGsDGjHfHbXq/1TGNaa8fKEf0eiriQg+v03lPUmTeJg8l4Pb/brDXo0FtHUzg8iiAxg6y+Ni9dk1iqn0CN1zkyduL1e4Nf4qT85fQH3GA+FSjbG60UNhGNv2TWnD/8FtiaNQL5uHybMsbk3Oiu2hE0RiYKOMWUvcbxk8AuGszE3wuMWMvSjGPO64sxDN4F5CqEHv1dc4TQ9YCL9P2PTUswJWKFiBo4EbLr8X5Igv+4YZ//x/+WI8oQnU2uz1UmrtHCXjb2T3F9heEMbMUb4INuxZ716oz1wPWgb6mzCHqRi1N8/jTs= chenj7728@DESKTOP-LKJ3I25"
+  public_key = file("~/.ssh/id_rsa.pub")
 }
 
 resource "aws_spot_instance_request" "minecraft" {
