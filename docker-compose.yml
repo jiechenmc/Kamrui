@@ -136,7 +136,16 @@ services:
     depends_on:
       - repository
       - deck
-
+  
+  messaging:  
+    container_name: messaging
+    build: ./loqi/messaging/
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.messaging.rule=PathPrefix(`/api/messaging`)
+      - traefik.http.routers.messaging.entrypoints=web
+    volumes:
+      - ./messaging:/app
 volumes:
     PROMETHEUS:
     GRAFANA:
