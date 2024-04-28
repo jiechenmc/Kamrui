@@ -37,3 +37,11 @@
   [metrics.prometheus]
     entryPoint = "metrics"
     addServicesLabels = true
+
+[experimental.plugins]
+[experimental.plugins.cloudflarewarp]
+modulename = "github.com/BetterCorp/cloudflarewarp"
+version = "v1.3.0"
+
+[provider.plugin.cloudflarewarp]
+disableDefault = false
