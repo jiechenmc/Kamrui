@@ -21,7 +21,7 @@
     defaultMode = "keep"
 
     [accessLog.fields.headers]
-      defaultMode = "drop"
+      defaultMode = "keep"
 
       [accessLog.fields.headers.names]
         "Cf-connecting-ip" = "keep"
