@@ -1,3 +1,6 @@
 [submodule "jiechen.dev"]
 	path = jiechen.dev
 	url = git@github.com:jiechenmc/jiechen.dev.git
+[submodule "loqi"]
+	path = loqi
+	url = git@github.com:viLoqi/loqi.git
