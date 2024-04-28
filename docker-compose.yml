@@ -44,6 +44,17 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+        
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
 
   grafana:
     image: grafana/grafana-enterprise
@@ -55,7 +66,7 @@ services:
       - GRAFANA:/var/lib/grafana
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     environment:
-      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "false"
       GF_INSTALL_PLUGINS: grafana-piechart-panel
     restart: unless-stopped
     logging:
