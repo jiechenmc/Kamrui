@@ -21,10 +21,11 @@
     defaultMode = "keep"
 
     [accessLog.fields.headers]
-      defaultMode = "keep"
+      defaultMode = "drop"
 
       [accessLog.fields.headers.names]
         "Cf-connecting-ip" = "keep"
+        "X-Real-Ip" = "keep"
   
 [api]
   dashboard = true

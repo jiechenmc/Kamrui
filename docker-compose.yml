@@ -20,7 +20,18 @@ services:
       - deck
       - repository
       - client
+    network_mode: "host"
       
+
+  # whoami:
+  #   image: traefik/whoami
+  #   command:
+  #     - --port=2001
+  #   # labels:
+  #   #   - traefik.enable=true
+  #   #   - traefik.http.routers.whoami.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/whoami`)
+  #   network_mode: "host"
+
   home:
     build: 
       context: jiechen.dev
