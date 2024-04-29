@@ -8,6 +8,7 @@ services:
     ports:
       - 80:80
       - 8080:8080
+      - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
@@ -20,17 +21,12 @@ services:
       - deck
       - repository
       - client
-    network_mode: "host"
       
-
   # whoami:
-  #   image: traefik/whoami
-  #   command:
-  #     - --port=2001
-  #   # labels:
-  #   #   - traefik.enable=true
-  #   #   - traefik.http.routers.whoami.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/whoami`)
-  #   network_mode: "host"
+    # image: traefik/whoami
+    # labels:
+    #   - traefik.enable=true
+    #   - traefik.http.routers.whoami.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/whoami`)
 
   home:
     build: 

@@ -5,11 +5,15 @@
 [entryPoints]
   [entryPoints.web]
     address = ":80"
+    # IMPORTANT, otherwise Traefik will drop the REAL-IP from cloudflare
+    [entryPoints.web.forwardedHeaders]
+      insecure = true
+
   [entryPoints.metrics]
     address = ":8082"
 
 [log]
-  level = "INFO"
+  level = "DEBUG"
   format = "common"
   #filePath = "/var/log/traefik.log"
 
@@ -24,6 +28,7 @@
       defaultMode = "drop"
 
       [accessLog.fields.headers.names]
+        "X-Forwarded-For" = "keep"
         "Cf-connecting-ip" = "keep"
         "X-Real-Ip" = "keep"
   
