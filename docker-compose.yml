@@ -22,11 +22,11 @@ services:
       - repository
       - client
       
-  # whoami:
-    # image: traefik/whoami
-    # labels:
-    #   - traefik.enable=true
-    #   - traefik.http.routers.whoami.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/whoami`)
+  whoami:
+    image: traefik/whoami
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/whoami`)
 
   home:
     build: 
