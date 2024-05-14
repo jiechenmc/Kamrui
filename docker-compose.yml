@@ -1,41 +1,6 @@
 version: '3'
 
 services:
-  traefik:
-    extends: 
-      file: loqi/docker-compose.prod.yml
-      service: traefik
-    ports:
-      - 80:80
-      - 8080:8080
-      - 443:443
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${PWD}/traefik.toml:/etc/traefik/traefik.toml
-    restart: always
-    depends_on:
-      - home
-      - prometheus
-      - grafana
-      - mongo
-      - deck
-      - repository
-      - client
-      
-  whoami:
-    image: traefik/whoami
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`loqi.jiechen.dev`) && PathPrefix(`/whoami`)
-
-  home:
-    build: 
-      context: jiechen.dev
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.home.rule=Host(`jiechen.dev`)
-      - traefik.http.routers.home.entrypoints=web
-    restart: always
 
   prometheus:
     image: prom/prometheus
@@ -80,37 +45,6 @@ services:
         max-size: "10m"
         max-file: "3"
         
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    volumes:
-      - MONGO:/data/db
-
-  repository:
-    extends: 
-      file: loqi/docker-compose.prod.yml
-      service: repository
-
-  deck:
-    extends: 
-      file: loqi/docker-compose.prod.yml
-      service: deck
-
-  client:
-    extends: 
-      file: loqi/docker-compose.prod.yml
-      service: client
-  
-  messaging:  
-    extends: 
-      file: loqi/docker-compose.prod.yml
-      service: messaging
-
 volumes:
     PROMETHEUS:
     GRAFANA:
-    UPTIME:
-    MONGO:
